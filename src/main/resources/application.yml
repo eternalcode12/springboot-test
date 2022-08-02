@@ -18,6 +18,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/testDB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
 server:
   port: 8099
