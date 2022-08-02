@@ -2,6 +2,7 @@ package com.example.demo03.service;
 
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.demo03.comm.dto.BaseQueryDto;
 import com.example.demo03.comm.dto.user.UserLoginDto;
 import com.example.demo03.comm.dto.user.UserRegisterDto;
 import com.example.demo03.comm.exception.BaseException;
@@ -52,4 +53,12 @@ public interface UserService extends IService<User> {
      * @throws BaseException 查询异常
      */
     User getUserInfoById(Long id) throws BaseException;
+
+    /**
+     * 查询所有用户
+     * @param baseQueryDto 基本查询条件
+     * @return 用户列表
+     * @throws BaseException 查询异常
+     */
+    JSONObject findAllUser(BaseQueryDto baseQueryDto) throws BaseException;
 }

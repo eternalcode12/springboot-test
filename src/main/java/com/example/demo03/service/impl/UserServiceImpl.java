@@ -3,7 +3,9 @@ package com.example.demo03.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.demo03.comm.dto.BaseQueryDto;
 import com.example.demo03.comm.dto.user.UserLoginDto;
 import com.example.demo03.comm.dto.user.UserRegisterDto;
 import com.example.demo03.comm.exception.BaseException;
@@ -113,5 +115,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BaseException(500, "用户不存在");
         }
         return one;
+    }
+
+    @Override
+    public JSONObject findAllUser(BaseQueryDto baseQueryDto) throws BaseException {
+        // 校验参数
+        baseQueryDto.checkPageParam();
+        JSONObject jsonObject = new JSONObject();
+        // 获取当前操作用户信息
+        HashMap<String, Object> lock = ThreadUtils.getLock();
+        String uid = lock.get("uid").toString();
+        // 判断当前用户是否有更新权限
+        User one = this.getOne(new LambdaQueryWrapper<User>().eq(User::getUId, uid));
+        // 判断当前用户是否是管理员
+        if (one.getIsAdmin() == 1) {
+            throw new BaseException(500, "当前用户无管理员权限");
+        }
+        // 封装参数
+        jsonObject.put("total", this.count());
+        if (baseQueryDto.getAll()) {
+            try {
+                jsonObject.put("data", this.list());
+            } catch (Exception e) {
+                throw new BaseException(500, "查询失败,请联系管理员");
+            }
+        } else {
+            try {
+                jsonObject.put("data", this.page(new Page<>(baseQueryDto.getCurrentNo(), baseQueryDto.getPageSize())).getRecords());
+            } catch (Exception e) {
+                throw new BaseException(500, "查询失败,请联系管理员");
+            }
+        }
+        // 执行更新操作
+        return jsonObject;
     }
 }

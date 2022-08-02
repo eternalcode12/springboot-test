@@ -1,5 +1,7 @@
 package com.example.demo03.controller;
 
+import cn.hutool.json.JSONObject;
+import com.example.demo03.comm.dto.BaseQueryDto;
 import com.example.demo03.comm.dto.user.UserRegisterDto;
 import com.example.demo03.comm.exception.BaseException;
 import com.example.demo03.comm.utils.AppResult;
@@ -32,7 +34,7 @@ public class UserController {
         return AppResult.success(200, "删除成功");
     }
 
-    @PostMapping("/update")
+    @PostMapping("/updateUser")
     @ApiOperation("更新用户")
     public AppResult update(@RequestBody User user) throws BaseException {
         userService.update(user);
@@ -44,5 +46,12 @@ public class UserController {
     public AppResult getUserInfo(@PathVariable("id") Long id) throws BaseException {
         userService.getUserInfoById(id);
         return AppResult.success(200, "查询成功");
+    }
+
+    @PostMapping("/findAllUser")
+    @ApiOperation("查询所有用户")
+    public AppResult findAllUsers(@RequestBody BaseQueryDto baseQueryDto) throws BaseException {
+        JSONObject allUser = userService.findAllUser(baseQueryDto);
+        return AppResult.success(200, "查询成功", allUser);
     }
 }

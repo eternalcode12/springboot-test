@@ -15,7 +15,7 @@ import java.util.Date;
  * @since 1.8
  */
 @Data
-@TableName("db_user")
+@TableName("inis_user")
 public class User {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
