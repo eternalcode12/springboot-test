@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: demo
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/worksheet?serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    connect-timeout: 5000ms
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/testDB
+
+server:
+  port: 8099
+  servlet:
+    context-path: /v1
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #??SQL????
+    map-underscore-to-camel-case: true
+
+springfox:
+  swagger2:
+    enabled: true
